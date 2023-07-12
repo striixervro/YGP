@@ -141,62 +141,61 @@ h1 {
 
     <script>
       /*  */
-      const apiUrl = "https://api.openai.com/v1/chat/completions";
-const apiKey = "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"; // Add your own key here
-const proxyUrl = "https://cors-anywhere.herokuapp.com/"; // Proxy server URL
+     const apiUrl = "https://api.openai.com/v1/chat/completions";
+        const apiKey = "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"; // Add your own key here
 
-const loader = document.getElementById("loader");
+        const loader = document.getElementById("loader");
 
-async function postData() {
-  const message = document.getElementById('message').value;
+        async function postData() {
+            const message = document.getElementById('message').value;
 
-  if (apiKey === "") {
-    console.log("You forgot to add your own key!");
-    return;
-  }
+            if (apiKey === "YOUR_API_KEY_HERE") {
+                console.log("You forgot to add your own key!");
+                return;
+            }
 
-  loader.style.display = "block";
-  document.getElementById('message').disabled = true;
-  document.getElementById('message').style.cursor = "not-allowed";
+            loader.style.display = "block";
+            document.getElementById('message').disabled = true;
+            document.getElementById('message').style.cursor = "not-allowed";
 
-  const response = await fetch(proxyUrl + apiUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${apiKey}`
-    },
-    body: JSON.stringify({
-      "model": "gpt-3.5-turbo",
-      "messages": [
-        {
-          "role": "system",
-          "content": "You"
-        },
-        {
-          "role": "user",
-          "content": message
+            const response = await fetch(apiUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    "model": "gpt-3.5-turbo",
+                    "messages": [
+                        {
+                            "role": "system",
+                            "content": "You"
+                        },
+                        {
+                            "role": "user",
+                            "content": message
+                        }
+                    ]
+                })
+            });
+
+            const data = await response.json();
+            console.log(data);
+            console.log("DONE");
+
+            loader.style.display = "none";
+            document.getElementById('message').disabled = false;
+            document.getElementById('message').style.cursor = "auto";
+
+            const responseText = data.choices[0].message.content.trim();
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.textContent = responseText;
+            document.getElementById('chat-area').appendChild(card);
+
+            document.getElementById('message').value = '';
+            document.getElementById('message').focus();
         }
-      ]
-    })
-  });
-
-  const data = await response.json();
-  console.log(data);
-  console.log("DONE");
-
-  loader.style.display = "none";
-  document.getElementById('message').disabled = false;
-  document.getElementById('message').style.cursor = "auto";
-
-  const responseText = data.choices[0].message.content.trim();
-  const card = document.createElement('div');
-  card.className = 'card';
-  card.textContent = responseText;
-  document.getElementById('chat-area').appendChild(card);
-
-  document.getElementById('message').value = '';
-  document.getElementById('message').focus();
-}
 
     </script>
   </body>
